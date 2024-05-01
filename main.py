@@ -33,8 +33,8 @@ class HotelManagementSystem(tk.Tk):
         self.dashboardPhoto = self.dashboardPhoto.subsample(5, 5)
 
         self.dashboard_btn = ttk.Button(self.nav_bar, text="Dashboard", style='nav.TButton', command=self.show_dashboard,
-                                        image=self.dashboardPhoto, compound=LEFT)
-        self.dashboard_btn.pack(side=tk.LEFT, padx=0, pady=5)
+                                        image=self.dashboardPhoto, compound=LEFT,)
+        self.dashboard_btn.pack(side=tk.LEFT, padx=(50,0), pady=(15,))
         
         # Guest
         self.guestPhoto = tk.PhotoImage(file='images/guest.png')
@@ -42,7 +42,7 @@ class HotelManagementSystem(tk.Tk):
 
         self.guest_btn = ttk.Button(self.nav_bar, text="Guest", style='nav.TButton', command=self.show_guest,
                                     image=self.guestPhoto, compound=LEFT)
-        self.guest_btn.pack(side=tk.LEFT, padx=0)
+        self.guest_btn.pack(side=tk.LEFT, padx=0,)
 
         # Data
         self.dataPhoto = tk.PhotoImage(file='images/data.png')
@@ -50,7 +50,7 @@ class HotelManagementSystem(tk.Tk):
 
         self.data_btn = ttk.Button(self.nav_bar, text="Data",style='nav.TButton', command=self.show_data,
                                    image=self.dataPhoto, compound=LEFT)
-        self.data_btn.pack(side=tk.LEFT, padx=0)
+        self.data_btn.pack(side=tk.LEFT, padx=0,)
 
         # Create a frame to hold views
         self.content_frame = ttk.Frame(self.main_frame)

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.ttk import *
 
 class DashboardView(tk.Frame):
     def __init__(self, parent, controller):
@@ -7,15 +8,15 @@ class DashboardView(tk.Frame):
 
         # Create parent frame for layout
         self.dashboard_frame = ttk.Frame(self)
-        self.dashboard_frame.pack(fill="both", expand=True)
+        self.dashboard_frame.grid(row=0, column=0, sticky="nsew")
 
         # ------------------ Premium Frame ------------------
         premium_frame = ttk.Frame(self.dashboard_frame)
-        premium_frame.pack(fill='x', padx=10, pady= 5)
+        premium_frame.grid(row=0, column=0, sticky="ew")
 
         premium_label = ttk.Label(premium_frame, text="Premium Room",
                                   font=("Helvetica", 14, "bold"))
-        premium_label.pack(fill="x", padx=200, pady=5)
+        premium_label.grid(row=0, column=2, columnspan=5)
 
         list_premium_room = ['A-01', 'A-101', 'A-102', 'A-103', 'A-104',
                              'A-201', 'A-202', 'A-203', 'A-204']
@@ -24,11 +25,11 @@ class DashboardView(tk.Frame):
         
         # ------------------ Standart Frame ------------------
         standart_frame = ttk.Frame(self.dashboard_frame)
-        standart_frame.pack(fill='x', padx=10, pady= 5)
+        standart_frame.grid(row=1, column=0, columnspan=5)
 
         standart_label = ttk.Label(standart_frame, text="Standart Room",
                                   font=("Helvetica", 14, "bold"))
-        standart_label.pack(fill="x", padx=200, pady=5, anchor="center")
+        standart_label.grid(row=0, column=0, padx=200, pady=5)
 
         list_standart_room = ['B-01', 'B-02','B-101', 'B-102', 'B-103', 'B-104',
                              'B-201', 'B-202', 'B-203', 'B-204', 'B-301', 'B-302',
@@ -38,18 +39,37 @@ class DashboardView(tk.Frame):
         self.generate_standard_container(list_standart_room, standart_frame)
 
     def generate_premium_container(self, list_room, frame):
-        for i in list_room:
-            premium_container = self.create_container(i, frame)
-            premium_container.pack(fill="x", padx=10, pady=0)
+        for i, room in enumerate(list_room):
+            premium_container = self.create_container(room, frame)
+            premium_container.grid(row=1, column=i, padx=(0,5))
             
 
     def generate_standard_container(self, list_room, frame):
         pass
 
     def create_container(self, list_room, frame):
-        container = ttk.Frame(frame)
+        container = ttk.Frame(frame, style="Container.TFrame")
+        container.grid()
 
-        room_label = ttk.Label(container, text=list_room, font=("Helvetica", 10, "bold"))
-        room_label.pack(side="left", padx=(0, 10))
+        self.style = Style()
+        self.style.configure("Container.TFrame", background='#CDCDCD')
+
+        # Photo
+        roomPhoto = tk.PhotoImage(file='images/room.png')
+        roomPhoto = roomPhoto.subsample(1, 1)
+
+        roomPhoto_label = ttk.Label(container, image=roomPhoto, background='#CDCDCD')
+        roomPhoto_label.image = roomPhoto
+        roomPhoto_label.grid(row=0, column=0, rowspan=3)
+
+        # Room indicator
+        room_condition = ttk.Label(container, text="Full", font=("Helvetica", 10, "bold")
+                               , background='#CDCDCD')
+        room_condition.grid(row=0, column=1)
+
+        # Room Number
+        room_label = ttk.Label(container, text=list_room, font=("Helvetica", 10, "bold")
+                               , background='#CDCDCD')
+        room_label.grid(row=1, column=1)
 
         return container

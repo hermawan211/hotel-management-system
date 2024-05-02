@@ -12,7 +12,7 @@ class DashboardView(tk.Frame):
 
         # ------------------ Premium Frame ------------------
         premium_frame = ttk.Frame(self.dashboard_frame)
-        premium_frame.grid(row=0, column=0, sticky="ew")
+        premium_frame.grid(row=0, column=0, sticky="ew", columnspan=5)
 
         premium_label = ttk.Label(premium_frame, text="Premium Room",
                                   font=("Helvetica", 14, "bold"))
@@ -25,11 +25,11 @@ class DashboardView(tk.Frame):
         
         # ------------------ Standart Frame ------------------
         standart_frame = ttk.Frame(self.dashboard_frame)
-        standart_frame.grid(row=1, column=0, columnspan=5)
+        standart_frame.grid(row=1, column=0, sticky="ew", columnspan=5)
 
         standart_label = ttk.Label(standart_frame, text="Standart Room",
                                   font=("Helvetica", 14, "bold"))
-        standart_label.grid(row=0, column=0, padx=200, pady=5)
+        standart_label.grid(row=0, column=0, columnspan=5)
 
         list_standart_room = ['B-01', 'B-02','B-101', 'B-102', 'B-103', 'B-104',
                              'B-201', 'B-202', 'B-203', 'B-204', 'B-301', 'B-302',
@@ -41,11 +41,25 @@ class DashboardView(tk.Frame):
     def generate_premium_container(self, list_room, frame):
         for i, room in enumerate(list_room):
             premium_container = self.create_container(room, frame)
-            premium_container.grid(row=1, column=i, padx=(0,5))
+
+            if i < 3:
+                premium_container.grid(row=1, column=i, padx=10)
+            elif i < 6:
+                premium_container.grid(row=2, column=i-3, padx=10)
+            else:
+                premium_container.grid(row=3, column=i-6, padx=10)
             
 
     def generate_standard_container(self, list_room, frame):
-        pass
+        for i, room in enumerate(list_room):
+            standart_container = self.create_container(room, frame)
+
+            if i < 7:
+                standart_container.grid(row=1, column=i, padx=2)
+            elif i < 14:
+                standart_container.grid(row=2, column=i-7, padx=2)
+            else:
+                standart_container.grid(row=3, column=i-14, padx=2)
 
     def create_container(self, list_room, frame):
         container = ttk.Frame(frame, style="Container.TFrame")

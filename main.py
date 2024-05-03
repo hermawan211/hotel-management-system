@@ -89,4 +89,5 @@ class HotelManagementSystem(tk.Tk):
 if __name__ == "__main__":
     app = HotelManagementSystem()
     app.configure(background='#CDCDCD')
+    app.state('zoomed')
     app.mainloop()

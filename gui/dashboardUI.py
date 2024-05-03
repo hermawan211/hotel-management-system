@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 
+from gui.bookingUI import *
+
 class DashboardView(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -91,7 +93,10 @@ class DashboardView(tk.Frame):
         room_label.grid(row=1, column=1)
 
         # Room Button
-        room_btn = ttk.Button(container, text="Book")
+        room_btn = ttk.Button(container, text="Book", command=lambda room=list_room: self.open_booking(room))
         room_btn.grid(row=2, column=1)
 
         return container
+    
+    def open_booking(self, room):
+        booking = BookingView(self, room)

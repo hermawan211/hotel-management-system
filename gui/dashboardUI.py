@@ -14,7 +14,7 @@ class DashboardView(tk.Frame):
 
         # ------------------ Premium Frame ------------------
         premium_frame = ttk.Frame(self.dashboard_frame)
-        premium_frame.grid(row=0, column=0, sticky="s", pady=(0,30))
+        premium_frame.grid(row=0, column=0, sticky="s", pady=(0,30),)
 
         premium_label = ttk.Label(premium_frame, text="Premium Room",
                                   font=("Helvetica", 14, "bold"))
@@ -27,7 +27,7 @@ class DashboardView(tk.Frame):
         
         # ------------------ Standart Frame ------------------
         standart_frame = ttk.Frame(self.dashboard_frame)
-        standart_frame.grid(row=1, column=0, sticky="nsew")
+        standart_frame.grid(row=1, column=0, sticky="nsew", padx=75)
 
         standart_label = ttk.Label(standart_frame, text="Standart Room",
                                   font=("Helvetica", 14, "bold"))

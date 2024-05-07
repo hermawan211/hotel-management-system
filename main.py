@@ -28,7 +28,7 @@ class HotelManagementSystem(tk.Tk):
         self.style.configure('nav.TButton', font = ('calibri', 12), background='#2E2E2E', foreground="black")
         self.style.map('nav.TButton',  background=[('active', 'black')])
 
-        # Dashboard
+        # Dashboard frame
         self.dashboardPhoto = tk.PhotoImage(file='images/dashboard.png')
         self.dashboardPhoto = self.dashboardPhoto.subsample(5, 5)
 
@@ -36,7 +36,7 @@ class HotelManagementSystem(tk.Tk):
                                         image=self.dashboardPhoto, compound=LEFT,)
         self.dashboard_btn.pack(side=tk.LEFT, padx=(50,0), pady=(15,))
         
-        # Guest
+        # Guest frame
         self.guestPhoto = tk.PhotoImage(file='images/guest.png')
         self.guestPhoto = self.guestPhoto.subsample(5, 5)
 
@@ -44,7 +44,7 @@ class HotelManagementSystem(tk.Tk):
                                     image=self.guestPhoto, compound=LEFT)
         self.guest_btn.pack(side=tk.LEFT, padx=0,)
 
-        # Data
+        # Data frame
         self.dataPhoto = tk.PhotoImage(file='images/data.png')
         self.dataPhoto = self.dataPhoto.subsample(5,5)
 

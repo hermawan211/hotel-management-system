@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 from datetime import date
+from tkinter import messagebox
 from tkcalendar import Calendar
 
 today = date.today()
@@ -84,6 +85,11 @@ class BookingView(tk.Frame):
         dateIn = today
         dateOut = formatted_date
         roomCondition = 'Full'
-        print(dateIn, dateOut)
+
+        if name =='' or phone=='':
+            messagebox.showwarning("Warning", "Please input a task", parent=self.detail_frame)
+
+        else:
+            pass
 
         

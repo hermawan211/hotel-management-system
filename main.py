@@ -6,6 +6,8 @@ from gui.dashboardUI import *
 from gui.guestsUI import *
 from gui.dataUI import *
 
+import sqlite3
+
 class HotelManagementSystem(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -83,8 +85,6 @@ class HotelManagementSystem(tk.Tk):
         # show the requested frame
         frame = self.frames[frame_name]
         frame.grid(row=0, column=0, sticky="nswe")
-
-        
 
 if __name__ == "__main__":
     app = HotelManagementSystem()

@@ -1,10 +1,9 @@
 import tkinter as tk
+from tkinter import ttk, messagebox
 from tkinter import *
-from tkinter import ttk
-from tkinter.ttk import *
 from datetime import date
-from tkinter import messagebox
 from tkcalendar import Calendar
+from gui.databaseApp import *
 
 today = date.today()
 today = today.strftime("%d-%m-%Y")
@@ -14,18 +13,18 @@ class BookingView(tk.Frame):
         super().__init__(parent)
 
         # Create parent frame for layout
-        booking_frame = Toplevel()
-        booking_frame.title("Booking")
-        booking_frame.geometry("750x400")
+        self.booking_frame = Toplevel()
+        self.booking_frame.title("Booking")
+        self.booking_frame.geometry("750x400")
 
         # Set the window position
-        booking_frame.geometry("+{}+{}".format(270, 150))
+        self.booking_frame.geometry("+{}+{}".format(270, 150))
 
-        self.detail_frame = ttk.Frame(booking_frame)
+        self.detail_frame = ttk.Frame(self.booking_frame)
         self.detail_frame.grid(row=0, column=0, padx=(180,0), sticky="nsew")
 
         # ------------------ Booking Details ------------------
-        booking_label = ttk.Label(booking_frame, text="Booking Details",
+        booking_label = ttk.Label(self.booking_frame, text="Booking Details",
                                   font=("Helvetica", 14, "bold"))
         booking_label.grid(row=0, column=0, sticky='nw')
 
@@ -35,7 +34,8 @@ class BookingView(tk.Frame):
         date_label.grid(row=0, column=1, sticky='e', padx=(60, 0))
 
         # room number
-        room_label = ttk.Label(self.detail_frame, text=room,
+        self.room = room
+        room_label = ttk.Label(self.detail_frame, text=self.room,
                                   font=("Helvetica", 12, 'bold'))
         room_label.grid(row=0, column=2,padx=(20, 0))
 
@@ -73,7 +73,7 @@ class BookingView(tk.Frame):
         submit_button.grid(row=5, column=1, pady=(20,0))
 
     def cancel_data(self):
-        pass
+        self.booking_frame.destroy()
 
     def submit_data(self):
         selected_date = self.cal.get_date()
@@ -84,12 +84,14 @@ class BookingView(tk.Frame):
         phone = self.phone_entry.get()
         dateIn = today
         dateOut = formatted_date
-        roomCondition = 'Full'
+        #roomCondition = 'Full'
 
         if name =='' or phone=='':
-            messagebox.showwarning("Warning", "Please input a task", parent=self.detail_frame)
+            messagebox.showwarning("Warning", "Please input name and phone!", parent=self.detail_frame)
 
         else:
-            pass
+            self.name_entry.delete(0, END)
+            self.phone_entry.delete(0, END)
+            write_data(name, phone, dateIn, dateOut, self.room, "Full")
 
         

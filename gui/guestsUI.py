@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 import sqlite3
 
+from gui.databaseApp import *
+
 class GuestView(tk.Frame):
     def __init__(self, parent, controlller):
         super().__init__(parent)
@@ -11,23 +13,17 @@ class GuestView(tk.Frame):
         self.guest_frame.grid(row=0, column=0, sticky="nsew")
 
         label = ttk.Label(self.guest_frame, text="Guests")
-        label.grid(row=0, column=0)
+        label.grid(row=0, column=0, sticky='n')
 
-        conn = sqlite3.connect('guest_record.db')
-        c = conn.cursor()
+        self.record_label = ttk.Label(self.guest_frame, text="")
+        self.record_label.grid(row=1, column=0, )
 
-        # Create Query functions
-        c.execute("SELECT *, oid FROM guests")
-        records = c.fetchall()
+        self.db_interaction = DatabaseIntraction()
 
-        # getting all records
-        print_records = ''
-        for record in records:
-            print_records += str(record[:-2]) + "\n"
+        # display records
+        self.display_guests()
 
-        # label to fetch it on screen
-        record_label = ttk.Label(self.guest_frame, text=print_records)
-        record_label.grid(row=1, column=0)
+    def display_guests(self):
+        records = self.db_interaction.display_records()
+        self.record_label.config(text=records)
 
-
-        

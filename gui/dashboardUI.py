@@ -7,6 +7,7 @@ from gui.bookingUI import *
 class DashboardView(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
+        self.controller = controller
 
         # Create parent frame for layout
         self.dashboard_frame = ttk.Frame(self)
@@ -99,4 +100,4 @@ class DashboardView(tk.Frame):
         return container
     
     def open_booking(self, room):
-        booking = BookingView(self, room)
+        booking = BookingView(self, room, self.controller)

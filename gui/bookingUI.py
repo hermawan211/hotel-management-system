@@ -3,14 +3,18 @@ from tkinter import ttk, messagebox
 from tkinter import *
 from datetime import date
 from tkcalendar import Calendar
+
 from gui.databaseApp import *
+from gui.guestsUI import *
+from gui.dataUI import *
 
 today = date.today()
 today = today.strftime("%d-%m-%Y")
 
 class BookingView(tk.Frame):
-    def __init__(self, parent, room):
+    def __init__(self, parent, room, controller):
         super().__init__(parent)
+        self.controller = controller
 
         # Create parent frame for layout
         self.booking_frame = Toplevel()
@@ -92,6 +96,11 @@ class BookingView(tk.Frame):
         else:
             self.name_entry.delete(0, END)
             self.phone_entry.delete(0, END)
-            write_data(name, phone, dateIn, dateOut, self.room, "Full")
+
+            db_interaction = DatabaseIntraction()
+            db_interaction.write_data(name, phone, dateIn, dateOut, self.room, "Full")
+
+            self.controller.frames[GuestView.__name__].display_guests()
+            self.controller.frames[DataView.__name__].display_data()
 
         

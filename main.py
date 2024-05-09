@@ -13,15 +13,15 @@ class HotelManagementSystem(tk.Tk):
         super().__init__()
         self.title("Hotel Fatima System")
 
-        label = ttk.Label(self, text="Hotel Mega6", font=30, background='#CDCDCD')
+        label = ttk.Label(self, text="HOTEL MEGA 6", font=("Helvetica", 25, "bold"), background='#F8C21E')
         label.pack(pady=20, padx=20)
     
         # Main frame
         self.main_frame = ttk.Frame(self)
-        self.main_frame.pack(fill=tk.BOTH, expand=True)
+        self.main_frame.pack(fill=tk.BOTH, expand=True,)
 
         # Navigation bar
-        self.nav_bar = ttk.Frame(self.main_frame)
+        self.nav_bar = ttk.Frame(self.main_frame,)
         self.nav_bar.pack(side=tk.TOP, fill=tk.X)
 
         # ------------------ Navigation buttons ------------------
@@ -88,6 +88,6 @@ class HotelManagementSystem(tk.Tk):
 
 if __name__ == "__main__":
     app = HotelManagementSystem()
-    app.configure(background='#CDCDCD')
+    app.configure(background='#F8C21E')
     app.state('zoomed')
     app.mainloop()

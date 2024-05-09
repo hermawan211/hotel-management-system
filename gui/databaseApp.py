@@ -44,3 +44,11 @@ class DatabaseIntraction():
         self.c.execute("DELETE from guests WHERE oid=" + destination)
 
         self.conn.commit()
+
+    def get_room_status(self, room_condition):
+        if room_condition == "Empty":
+            return "Empty"
+        elif room_condition == "Occupied":
+            return "Occupied"
+        elif room_condition == "Needs Cleaning":
+            return "Needs Cleaning"

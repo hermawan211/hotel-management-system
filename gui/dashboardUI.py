@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter.ttk import *
 
 from gui.bookingUI import *
+from gui.databaseApp import *
 
 class DashboardView(tk.Frame):
     def __init__(self, parent, controller):
@@ -14,32 +15,32 @@ class DashboardView(tk.Frame):
         self.dashboard_frame.grid(row=0, column=0, sticky="nsew")
 
         # ------------------ Premium Frame ------------------
-        premium_frame = ttk.Frame(self.dashboard_frame)
-        premium_frame.grid(row=0, column=0, sticky="s", pady=(0,30),)
+        self.premium_frame = ttk.Frame(self.dashboard_frame)
+        self.premium_frame.grid(row=0, column=0, sticky="s", pady=(0,30),)
 
-        premium_label = ttk.Label(premium_frame, text="Premium Room",
+        premium_label = ttk.Label(self.premium_frame, text="Premium Room",
                                   font=("Helvetica", 14, "bold"))
         premium_label.grid(row=0, column=0, columnspan=5)
 
-        list_premium_room = ['A-01', 'A-101', 'A-102', 'A-103', 'A-104',
+        self.list_premium_room = ['A-01', 'A-101', 'A-102', 'A-103', 'A-104',
                              'A-201', 'A-202', 'A-203', 'A-204']
 
-        self.generate_premium_container(list_premium_room, premium_frame)
+        self.generate_premium_container(self.list_premium_room, self.premium_frame)
         
         # ------------------ Standart Frame ------------------
-        standart_frame = ttk.Frame(self.dashboard_frame)
-        standart_frame.grid(row=1, column=0, sticky="nsew", padx=75)
+        self.standart_frame = ttk.Frame(self.dashboard_frame)
+        self.standart_frame.grid(row=1, column=0, sticky="nsew", padx=75)
 
-        standart_label = ttk.Label(standart_frame, text="Standart Room",
+        standart_label = ttk.Label(self.standart_frame, text="Standart Room",
                                   font=("Helvetica", 14, "bold"))
         standart_label.grid(row=0, column=0, columnspan=7)
 
-        list_standart_room = ['B-01', 'B-02','B-101', 'B-102', 'B-103', 'B-104',
+        self.list_standart_room = ['B-01', 'B-02','B-101', 'B-102', 'B-103', 'B-104',
                              'B-201', 'B-202', 'B-203', 'B-204', 'B-301', 'B-302',
                              'B-303', 'B-304', 'B-305', 'B-306', 'B-307', 'B-308',
                              'B-309', 'B-310', 'B-311']
 
-        self.generate_standard_container(list_standart_room, standart_frame)
+        self.generate_standard_container(self.list_standart_room, self.standart_frame)
 
     def generate_premium_container(self, list_room, frame):
         for i, room in enumerate(list_room):
@@ -63,6 +64,8 @@ class DashboardView(tk.Frame):
                 standart_container.grid(row=3, column=i-14, padx=2, pady=2)
 
     def create_container(self, list_room, frame):
+        self.db_interaction = DatabaseIntraction()
+
         container = ttk.Frame(frame, style="Container.TFrame", borderwidth=1, relief="solid")
         container.grid()
 
@@ -79,11 +82,11 @@ class DashboardView(tk.Frame):
 
         # Room indicator
 
-        room_condition = ttk.Label(container, text="Empty", font=("Helvetica", 10, "bold")
+        room_condition = ttk.Label(container, text=self.db_interaction.get_room_status(list_room), font=("Helvetica", 10, "bold")
                                , background='#CDCDCD')
-        room_condition.grid(row=0, column=1, sticky='e')
+        room_condition.grid(row=0, column=1, padx=(18,0))
 
-        room_led = tk.PhotoImage(file='images/green.png')
+        room_led = tk.PhotoImage(file=f'images/{self.db_interaction.get_room_status(list_room)}.png')
         room_led_label = ttk.Label(container, image=room_led, background='#CDCDCD')
         room_led_label.image = room_led
         room_led_label.grid(row=0, column=1, sticky='w')
@@ -98,6 +101,21 @@ class DashboardView(tk.Frame):
         room_btn.grid(row=2, column=1)
 
         return container
+    
+    def refresh(self):
+        # Destroy old premium containers
+        for widget in self.premium_frame.winfo_children():
+            widget.destroy()
+        
+        # new refreshed containers
+        self.generate_premium_container(self.list_premium_room, self.premium_frame)
+
+        # Destroy old standard containers
+        for widget in self.standart_frame.winfo_children():
+            widget.destroy()
+
+        # new refreshed containers
+        self.generate_standard_container(self.list_standart_room, self.standart_frame)
     
     def open_booking(self, room):
         booking = BookingView(self, room, self.controller)

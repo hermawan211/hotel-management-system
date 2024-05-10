@@ -9,7 +9,7 @@ from gui.guestsUI import *
 from gui.dataUI import *
 
 today = date.today()
-today = today.strftime("%d-%m-%Y")
+today = today.strftime("%d-%m-%y")
 
 class BookingView(tk.Frame):
     def __init__(self, parent, room, controller):

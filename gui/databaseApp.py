@@ -2,6 +2,11 @@ from tkinter import *
 import tkinter as tk
 import sqlite3
 
+from datetime import date
+
+today = date.today()
+today = today.strftime("%d-%m-%y")
+
 class DatabaseIntraction():
     def __init__(self):
 
@@ -38,6 +43,12 @@ class DatabaseIntraction():
         print_records = '\n'.join(str(record) for record in records)
         #self.conn.close()
         return print_records
+    
+    def display_active_room(self):
+        self.c.execute("SELECT * FROM guests WHERE check_out >= ?", (today,))
+        records = self.c.fetchall()
+        print_records = '\n'.join(str(record) for record in records)
+        return print_records
 
     def delete_data(self, destination):
         # delete
@@ -45,10 +56,21 @@ class DatabaseIntraction():
 
         self.conn.commit()
 
-    def get_room_status(self, room_condition):
-        if room_condition == "Empty":
-            return "Empty"
-        elif room_condition == "Occupied":
-            return "Occupied"
-        elif room_condition == "Needs Cleaning":
-            return "Needs Cleaning"
+    # room condition
+    def get_room_status(self, room):
+
+        self.c.execute("SELECT * FROM guests WHERE check_out == ?", (today,))
+        to_be_cleaned = self.c.fetchall()
+
+        self.c.execute("SELECT * FROM guests WHERE check_out > ?", (today,))
+        occupied = self.c.fetchall()
+
+        room_to_be_cleaned = [record[4] for record in to_be_cleaned]
+        room_occupied = [record[4] for record in occupied]
+
+        if room in room_to_be_cleaned:
+            return 'Idle'
+        elif room in room_occupied:
+            return 'Full'
+        else:
+            return 'Empty'

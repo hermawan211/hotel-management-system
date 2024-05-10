@@ -5,8 +5,9 @@ import sqlite3
 from gui.databaseApp import *
 
 class GuestView(tk.Frame):
-    def __init__(self, parent, controlller):
+    def __init__(self, parent, controller):
         super().__init__(parent)
+        self.controller = controller
 
         # Create parent frame for layout
         self.guest_frame = ttk.Frame(self)
@@ -24,6 +25,5 @@ class GuestView(tk.Frame):
         self.display_guests()
 
     def display_guests(self):
-        records = self.db_interaction.display_records()
+        records = self.db_interaction.display_active_room()
         self.record_label.config(text=records)
-

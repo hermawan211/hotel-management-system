@@ -15,12 +15,9 @@ class DashboardView(tk.Frame):
         self.dashboard_frame.grid(row=0, column=0, sticky="nsew")
 
         # ------------------ Premium Frame ------------------
+
         self.premium_frame = ttk.Frame(self.dashboard_frame)
         self.premium_frame.grid(row=0, column=0, sticky="s", pady=(0,30),)
-
-        premium_label = ttk.Label(self.premium_frame, text="Premium Room",
-                                  font=("Helvetica", 14, "bold"))
-        premium_label.grid(row=0, column=0, columnspan=5)
 
         self.list_premium_room = ['A-01', 'A-101', 'A-102', 'A-103', 'A-104',
                              'A-201', 'A-202', 'A-203', 'A-204']
@@ -30,10 +27,7 @@ class DashboardView(tk.Frame):
         # ------------------ Standart Frame ------------------
         self.standart_frame = ttk.Frame(self.dashboard_frame)
         self.standart_frame.grid(row=1, column=0, sticky="nsew", padx=75)
-
-        standart_label = ttk.Label(self.standart_frame, text="Standart Room",
-                                  font=("Helvetica", 14, "bold"))
-        standart_label.grid(row=0, column=0, columnspan=7)
+      
 
         self.list_standart_room = ['B-01', 'B-02','B-101', 'B-102', 'B-103', 'B-104',
                              'B-201', 'B-202', 'B-203', 'B-204', 'B-301', 'B-302',
@@ -43,6 +37,11 @@ class DashboardView(tk.Frame):
         self.generate_standard_container(self.list_standart_room, self.standart_frame)
 
     def generate_premium_container(self, list_room, frame):
+
+        premium_label = ttk.Label(self.premium_frame, text="Premium Room",
+                                  font=("Helvetica", 14, "bold"))
+        premium_label.grid(row=0, column=0, columnspan=5)
+
         for i, room in enumerate(list_room):
             premium_container = self.create_container(room, frame)
 
@@ -53,6 +52,11 @@ class DashboardView(tk.Frame):
             
 
     def generate_standard_container(self, list_room, frame):
+
+        standart_label = ttk.Label(self.standart_frame, text="Standart Room",
+                                  font=("Helvetica", 14, "bold"))
+        standart_label.grid(row=0, column=0, columnspan=7)
+
         for i, room in enumerate(list_room):
             standart_container = self.create_container(room, frame)
 
@@ -64,7 +68,9 @@ class DashboardView(tk.Frame):
                 standart_container.grid(row=3, column=i-14, padx=2, pady=2)
 
     def create_container(self, list_room, frame):
+        
         self.db_interaction = DatabaseIntraction()
+        current_room_status = self.db_interaction.get_room_status(list_room)
 
         container = ttk.Frame(frame, style="Container.TFrame", borderwidth=1, relief="solid")
         container.grid()
@@ -82,23 +88,35 @@ class DashboardView(tk.Frame):
 
         # Room indicator
 
-        room_condition = ttk.Label(container, text=self.db_interaction.get_room_status(list_room), font=("Helvetica", 10, "bold")
+        room_condition = ttk.Label(container, text=current_room_status, font=("Helvetica", 10, "bold")
                                , background='#CDCDCD')
-        room_condition.grid(row=0, column=1, padx=(18,0))
+        room_condition.grid(row=0, column=1, padx=(18,0), columnspan=2)
 
-        room_led = tk.PhotoImage(file=f'images/{self.db_interaction.get_room_status(list_room)}.png')
+        room_led = tk.PhotoImage(file=f'images/{current_room_status}.png')
         room_led_label = ttk.Label(container, image=room_led, background='#CDCDCD')
         room_led_label.image = room_led
-        room_led_label.grid(row=0, column=1, sticky='w')
+        room_led_label.grid(row=0, column=1, sticky='w', )
 
         # Room Number
         room_label = ttk.Label(container, text=list_room, font=("Helvetica", 10, "bold")
                                , background='#CDCDCD')
-        room_label.grid(row=1, column=1)
+        room_label.grid(row=1, column=1, columnspan=2)
 
         # Room Button
-        room_btn = ttk.Button(container, text="Book", command=lambda room=list_room: self.open_booking(room))
-        room_btn.grid(row=2, column=1)
+        if current_room_status == 'Empty':
+            room_btn = ttk.Button(container, text="Book", command=lambda room=list_room: self.open_booking(room))
+            room_btn.grid(row=2, column=1)
+            
+
+        elif current_room_status == 'Idle':
+            room_btn = ttk.Button(container, text="Add", command=lambda room=list_room: self.add_booking(room), width=5)
+            room_btn.grid(row=2, column=1, sticky='w',)
+            room_btn = ttk.Button(container, text="Clean", command=lambda room=list_room: self.clean_booking(room), width=4.99)
+            room_btn.grid(row=2, column=2, sticky='e',)
+
+        elif current_room_status == 'Full':
+            room_btn = ttk.Button(container, text="Add", command=lambda room=list_room: self.add_booking(room))
+            room_btn.grid(row=2, column=1)
 
         return container
     
@@ -127,3 +145,9 @@ class DashboardView(tk.Frame):
                 print('Nope')
 
         booking = BookingView(self, room, self.controller, callback)
+
+    def clean_booking(self, room):
+        pass
+
+    def add_booking(self, room):
+        pass

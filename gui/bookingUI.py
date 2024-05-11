@@ -12,9 +12,11 @@ today = date.today()
 today = today.strftime("%d-%m-%y")
 
 class BookingView(tk.Frame):
-    def __init__(self, parent, room, controller):
+    def __init__(self, parent, room, controller, callback=None):
         super().__init__(parent)
+
         self.controller = controller
+        self.callback = callback
 
         # Create parent frame for layout
         self.booking_frame = Toplevel()
@@ -103,4 +105,5 @@ class BookingView(tk.Frame):
             self.controller.frames[GuestView.__name__].display_guests()
             self.controller.frames[DataView.__name__].display_data()
 
-        
+            if self.callback:
+                self.callback("Booked")

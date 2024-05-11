@@ -102,7 +102,7 @@ class DashboardView(tk.Frame):
 
         return container
     
-    def refresh(self):
+    def refresher(self):
         # Destroy old premium containers
         for widget in self.premium_frame.winfo_children():
             widget.destroy()
@@ -118,4 +118,12 @@ class DashboardView(tk.Frame):
         self.generate_standard_container(self.list_standart_room, self.standart_frame)
     
     def open_booking(self, room):
-        booking = BookingView(self, room, self.controller)
+        
+        def callback(booking_result):
+            print(booking_result)
+            if  booking_result=='Booked':
+                self.refresher()
+            else:
+                print('Nope')
+
+        booking = BookingView(self, room, self.controller, callback)

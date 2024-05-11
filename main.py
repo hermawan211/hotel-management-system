@@ -27,7 +27,7 @@ class HotelManagementSystem(tk.Tk):
         # ------------------ Navigation buttons ------------------
 
         self.style = Style()
-        self.style.configure('nav.TButton', font = ('calibri', 12), background='#2E2E2E', foreground="black")
+        self.style.configure('nav.TButton', font = ('calibri', 12), background='#2E2E2E', foreground="black",)
         self.style.map('nav.TButton',  background=[('active', 'black')])
 
         # Dashboard frame
@@ -36,7 +36,7 @@ class HotelManagementSystem(tk.Tk):
 
         self.dashboard_btn = ttk.Button(self.nav_bar, text="Dashboard", style='nav.TButton', command=self.show_dashboard,
                                         image=self.dashboardPhoto, compound=LEFT,)
-        self.dashboard_btn.pack(side=tk.LEFT, padx=(50,0), pady=(15,))
+        self.dashboard_btn.pack(side=tk.LEFT, padx=(50,0), pady=(10,))
         
         # Guest frame
         self.guestPhoto = tk.PhotoImage(file='images/guest.png')

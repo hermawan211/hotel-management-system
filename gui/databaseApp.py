@@ -47,7 +47,7 @@ class DatabaseIntraction():
     def display_active_room(self):
         self.c.execute("SELECT * FROM guests WHERE check_out >= ?", (today,))
         records = self.c.fetchall()
-        print_records = '\n'.join(str(record) for record in records)
+        print_records = '\n'.join(str(record[:-1]) for record in records)
         return print_records
 
     def delete_data(self, destination):

@@ -9,6 +9,9 @@ class DashboardView(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
+        
+        self.style = Style()
+        self.style.configure('room.TButton', background='#CDCDCD', foreground="#E5A535")
 
         # Create parent frame for layout
         self.dashboard_frame = ttk.Frame(self)
@@ -17,7 +20,7 @@ class DashboardView(tk.Frame):
         # ------------------ Premium Frame ------------------
 
         self.premium_frame = ttk.Frame(self.dashboard_frame)
-        self.premium_frame.grid(row=0, column=0, sticky="s", pady=(0,30),)
+        self.premium_frame.grid(row=0, column=0, sticky="s",)
 
         self.list_premium_room = ['A-01', 'A-101', 'A-102', 'A-103', 'A-104',
                              'A-201', 'A-202', 'A-203', 'A-204']
@@ -26,7 +29,7 @@ class DashboardView(tk.Frame):
         
         # ------------------ Standart Frame ------------------
         self.standart_frame = ttk.Frame(self.dashboard_frame)
-        self.standart_frame.grid(row=1, column=0, sticky="nsew", padx=75)
+        self.standart_frame.grid(row=1, column=0, sticky="nsew", padx=30)
       
 
         self.list_standart_room = ['B-01', 'B-02','B-101', 'B-102', 'B-103', 'B-104',
@@ -72,7 +75,7 @@ class DashboardView(tk.Frame):
         self.db_interaction = DatabaseIntraction()
         current_room_status = self.db_interaction.get_room_status(list_room)
 
-        container = ttk.Frame(frame, style="Container.TFrame", borderwidth=1, relief="solid")
+        container = ttk.Frame(frame, style="Container.TFrame", borderwidth=1, relief="raised")
         container.grid()
 
         self.style = Style()
@@ -84,7 +87,7 @@ class DashboardView(tk.Frame):
 
         roomPhoto_label = ttk.Label(container, image=roomPhoto, background='#CDCDCD')
         roomPhoto_label.image = roomPhoto
-        roomPhoto_label.grid(row=0, column=0, rowspan=3,)
+        roomPhoto_label.grid(row=0, column=0, rowspan=3, sticky='nswe', padx=5, pady=5)
 
         # Room indicator
 
@@ -104,18 +107,22 @@ class DashboardView(tk.Frame):
 
         # Room Button
         if current_room_status == 'Empty':
-            room_btn = ttk.Button(container, text="Book", command=lambda room=list_room: self.open_booking(room))
+            room_btn = ttk.Button(container, text="Book", command=lambda room=list_room: self.open_booking(room),
+                                  style='room.TButton',)
             room_btn.grid(row=2, column=1)
             
 
         elif current_room_status == 'Idle':
-            room_btn = ttk.Button(container, text="Add", command=lambda room=list_room: self.add_booking(room), width=5)
+            room_btn = ttk.Button(container, text="Add", command=lambda room=list_room: self.add_booking(room), width=5,
+                                  style='room.TButton',)
             room_btn.grid(row=2, column=1, sticky='w',)
-            room_btn = ttk.Button(container, text="Clean", command=lambda room=list_room: self.clean_booking(room), width=4.99)
+            room_btn = ttk.Button(container, text="Clean", command=lambda room=list_room: self.clean_booking(room), width=4.99,
+                                  style='room.TButton',)
             room_btn.grid(row=2, column=2, sticky='e',)
 
         elif current_room_status == 'Full':
-            room_btn = ttk.Button(container, text="Add", command=lambda room=list_room: self.add_booking(room))
+            room_btn = ttk.Button(container, text="Add", command=lambda room=list_room: self.add_booking(room),
+                                  style='room.TButton',)
             room_btn.grid(row=2, column=1)
 
         return container

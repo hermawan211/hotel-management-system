@@ -74,3 +74,9 @@ class DatabaseIntraction():
             return 'Full'
         else:
             return 'Empty'
+        
+    def get_guest_detail(self, room):
+        self.c.execute("SELECT * FROM guests WHERE room = ? AND room != 'empty'", (room,))
+        guest_detail = self.c.fetchall()
+
+        return guest_detail

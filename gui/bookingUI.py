@@ -12,7 +12,7 @@ today = date.today()
 today = today.strftime("%d-%m-%y")
 
 class BookingView(tk.Frame):
-    def __init__(self, parent, room, controller, callback=None):
+    def __init__(self, parent, room, controller, callback=None, exist=None):
         super().__init__(parent)
 
         self.controller = controller
@@ -78,6 +78,10 @@ class BookingView(tk.Frame):
         submit_button = ttk.Button(self.detail_frame, text="Submit", command=self.submit_data)
         submit_button.grid(row=5, column=1, pady=(20,0))
 
+        # Function for adding date for checkout
+        if exist == True:
+            self.add_checkOut(room)
+
     def cancel_data(self):
         self.booking_frame.destroy()
 
@@ -110,3 +114,18 @@ class BookingView(tk.Frame):
 
             messagebox.showinfo("Booking Details", "Successfully Booked!") 
             self.booking_frame.destroy()
+
+    def add_checkOut(self, room):
+        db_interaction = DatabaseIntraction()
+
+        self.name_entry.config(state='readonly')
+
+        name_label = ttk.Label(self.detail_frame, text=db_interaction.get_guest_detail(room)[0][0],
+                                font=("Helvetica", 12))
+        name_label.grid(row=1, column=1, padx=(40,), pady=(40,0))
+
+        self.phone_entry.config(state='readonly')
+
+        phone_label = ttk.Label(self.detail_frame, text=db_interaction.get_guest_detail(room)[0][1],
+                                font=("Helvetica", 12))
+        phone_label.grid(row=2, column=1, padx=(40,),)

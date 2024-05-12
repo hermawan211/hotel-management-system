@@ -109,7 +109,6 @@ class DashboardView(tk.Frame):
             room_btn = ttk.Button(container, text="Book", command=lambda room=list_room: self.open_booking(room),
                                   style='room.TButton',)
             room_btn.grid(row=2, column=1)
-            
 
         elif current_room_status == 'Idle':
             room_btn = ttk.Button(container, text="Add", command=lambda room=list_room: self.add_booking(room), width=5,
@@ -156,4 +155,4 @@ class DashboardView(tk.Frame):
         pass
 
     def add_booking(self, room):
-        pass
+        booking = BookingView(self, room, self.controller, exist=True)

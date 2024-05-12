@@ -107,3 +107,6 @@ class BookingView(tk.Frame):
 
             if self.callback:
                 self.callback("Booked")
+
+            messagebox.showinfo("Booking Details", "Successfully Booked!") 
+            self.booking_frame.destroy()

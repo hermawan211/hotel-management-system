@@ -90,7 +90,6 @@ class DashboardView(tk.Frame):
         roomPhoto_label.grid(row=0, column=0, rowspan=3, sticky='nswe', padx=5, pady=5)
 
         # Room indicator
-
         room_condition = ttk.Label(container, text=current_room_status, font=("Helvetica", 10, "bold")
                                , background='#CDCDCD')
         room_condition.grid(row=0, column=1, padx=(18,0), columnspan=2)

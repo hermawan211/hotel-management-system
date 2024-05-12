@@ -40,7 +40,7 @@ class DatabaseIntraction():
 
         self.c.execute("SELECT oid, * FROM guests")
         records = self.c.fetchall()
-        print_records = '\n'.join(str(record) for record in records)
+        print_records = '\n'.join(str(record[:-1]) for record in records)
         #self.conn.close()
         return print_records
     

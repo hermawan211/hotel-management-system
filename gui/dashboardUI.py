@@ -4,11 +4,15 @@ from tkinter.ttk import *
 
 from gui.bookingUI import *
 from gui.databaseApp import *
+from gui.dataUI import *
 
 class DashboardView(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
+
         self.controller = controller
+
+        data_view = DataView(self, controller, callback1=self.callback_from_data_view)
         
         self.style = Style()
         self.style.configure('room.TButton', background='#CDCDCD', foreground="#E5A535")
@@ -71,8 +75,8 @@ class DashboardView(tk.Frame):
                 standart_container.grid(row=3, column=i-14, padx=2, pady=2)
 
     def create_container(self, list_room, frame):
-        
         self.db_interaction = DatabaseIntraction()
+        
         current_room_status = self.db_interaction.get_room_status(list_room)
 
         container = ttk.Frame(frame, style="Container.TFrame", borderwidth=1, relief="raised")
@@ -143,13 +147,16 @@ class DashboardView(tk.Frame):
     def open_booking(self, room):
         
         def callback(booking_result):
-            print(booking_result)
             if  booking_result=='Booked':
                 self.refresher()
-            else:
-                print('Nope')
 
         booking = BookingView(self, room, self.controller, callback)
+
+    def callback_from_data_view(self, event=None):
+        print("Function Called")
+        if event == "Deleted":
+            print("Calling Refresher")
+            self.refresher()
 
     def clean_booking(self, room):
         pass

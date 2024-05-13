@@ -54,6 +54,10 @@ class HotelManagementSystem(tk.Tk):
                                    image=self.dataPhoto, compound=LEFT)
         self.data_btn.pack(side=tk.LEFT, padx=0,)
 
+        # Refresh Button
+        refresh_btn = ttk.Button(self.nav_bar, text="Refresh", command= self.refresh_dashboard)
+        refresh_btn.pack(side=tk.RIGHT, padx=(0,150), pady=(10,))
+
         # Create a frame to hold views
         self.content_frame = ttk.Frame(self.main_frame)
         self.content_frame.pack(fill=tk.BOTH, expand=True)
@@ -67,6 +71,11 @@ class HotelManagementSystem(tk.Tk):
 
         # Start with the dashboard view
         self.show_frame(DashboardView.__name__)
+
+    def refresh_dashboard(self):
+        dashboard_view = self.frames.get(DashboardView.__name__)
+        if dashboard_view:
+            dashboard_view.refresher()
 
     def show_dashboard(self):
         self.show_frame(DashboardView.__name__)

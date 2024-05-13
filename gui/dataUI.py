@@ -6,12 +6,12 @@ from gui.databaseApp import *
 from gui.guestsUI import *
 
 class DataView(tk.Frame):
-    def __init__(self, parent, controller, callback1=None):
+    def __init__(self, parent, controller):
         super().__init__(parent)
 
         self.controller = controller
         self.db_interaction = DatabaseIntraction()
-        self.callback1 = callback1
+        
 
         # Create parent frame for layout
         self.data_frame = ttk.Frame(self)
@@ -79,12 +79,16 @@ class DataView(tk.Frame):
         # Obtaining records from database
         records = self.db_interaction.display_records().split('\n')
 
-        list_records = [eval(record) for record in records]
+        # Filter out empty records
+        records = [record for record in records if record.strip()]
         
-        for i, record in enumerate(list_records):
-            for j, value in enumerate(record):
-                data_label = ttk.Label(self.data_container, text=f"{value}  ", font=("Helvetica", 11))
-                data_label.grid(row=i + 2, column=j, padx=(0,26), pady=5, sticky='nw')
+        # Process non-empty records
+        for i, record in enumerate(records):
+            record_data = eval(record)
+            for j, value in enumerate(record_data):
+                data_label = ttk.Label(self.data_container, text=value, font=("Helvetica", 11), anchor='center')
+                data_label.grid(row=i + 2, column=j, padx=(0, 0), pady=5, sticky='nw')
+
 
                 # Adjust column width dynamically based on content length
                 content_length = len(str(value))

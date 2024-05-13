@@ -4,15 +4,12 @@ from tkinter.ttk import *
 
 from gui.bookingUI import *
 from gui.databaseApp import *
-from gui.dataUI import *
 
 class DashboardView(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
 
         self.controller = controller
-
-        data_view = DataView(self, controller, callback1=self.callback_from_data_view)
         
         self.style = Style()
         self.style.configure('room.TButton', background='#CDCDCD', foreground="#E5A535")

@@ -4,6 +4,7 @@ from tkinter.ttk import *
 
 from gui.bookingUI import *
 from gui.databaseApp import *
+from gui.guestsUI import *
 
 class DashboardView(tk.Frame):
     def __init__(self, parent, controller):
@@ -149,14 +150,14 @@ class DashboardView(tk.Frame):
 
         booking = BookingView(self, room, self.controller, callback)
 
-    def callback_from_data_view(self, event=None):
-        print("Function Called")
-        if event == "Deleted":
-            print("Calling Refresher")
-            self.refresher()
-
     def clean_booking(self, room):
-        pass
+        self.db_interaction.clean_room(room)
+        self.controller.frames[GuestView.__name__].display_guests()
+        self.refresher()
 
     def add_booking(self, room):
-        booking = BookingView(self, room, self.controller, exist=True)
+        def callback(booking_result):
+            if  booking_result=='Booked':
+                self.refresher()
+
+        booking = BookingView(self, room, self.controller, callback, exist=True)

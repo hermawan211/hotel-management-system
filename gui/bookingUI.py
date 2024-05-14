@@ -17,6 +17,10 @@ class BookingView(tk.Frame):
 
         self.controller = controller
         self.callback = callback
+        self.exist = exist
+
+        db_interaction = DatabaseIntraction()
+        details = db_interaction.get_guest_detail(room)
 
         # Create parent frame for layout
         self.booking_frame = Toplevel()
@@ -44,22 +48,30 @@ class BookingView(tk.Frame):
         room_label = ttk.Label(self.detail_frame, text=self.room,
                                   font=("Helvetica", 12, 'bold'))
         room_label.grid(row=0, column=2,padx=(20, 0))
-
+        
         # name
+        self.name_var = tk.StringVar()
         name_label = ttk.Label(self.detail_frame, text="Name: ",
                                   font=("Helvetica", 12,))
         name_label.grid(row=1, column=0, pady=(40,0), sticky='w')
 
-        self.name_entry = ttk.Entry(self.detail_frame, font=("Helvetica", 12))
+        self.name_entry = ttk.Entry(self.detail_frame, textvariable=self.name_var, font=("Helvetica", 12))
         self.name_entry.grid(row=1, column=1, padx=(40,), pady=(40,0))
 
         # Phone
+        self.phone_var = tk.StringVar()
         phone_label = ttk.Label(self.detail_frame, text="Phone: ",
                                   font=("Helvetica", 12,))
         phone_label.grid(row=2, column=0, sticky='w')
 
-        self.phone_entry = ttk.Entry(self.detail_frame, font=("Helvetica", 12))
+        self.phone_entry = ttk.Entry(self.detail_frame, textvariable=self.phone_var, font=("Helvetica", 12))
         self.phone_entry.grid(row=2, column=1, padx=(40,))
+
+        # Function for adding date for checkout
+        if exist == True:
+            details = db_interaction.get_guest_detail(room)
+            self.name_var.set(details[0][0])
+            self.phone_var.set(details[0][1])
 
         # Checkout date entry
         checkout_label = ttk.Label(self.detail_frame, text="Checkout Date: ",
@@ -78,14 +90,12 @@ class BookingView(tk.Frame):
         submit_button = ttk.Button(self.detail_frame, text="Submit", command=self.submit_data)
         submit_button.grid(row=5, column=1, pady=(20,0))
 
-        # Function for adding date for checkout
-        if exist == True:
-            self.add_checkOut(room)
+        
 
     def cancel_data(self):
         self.booking_frame.destroy()
 
-    def submit_data(self):
+    def submit_data(self,):
         selected_date = self.cal.get_date()
         month, day, year = selected_date.split('/')
         formatted_date = f"{int(day):02d}-{int(month):02d}-{int(year)}"
@@ -104,7 +114,16 @@ class BookingView(tk.Frame):
             self.phone_entry.delete(0, END)
 
             db_interaction = DatabaseIntraction()
-            db_interaction.write_data(name, phone, dateIn, dateOut, self.room, "Full")
+            
+            if self.exist == True:
+                db_interaction.edit_data(self.room, dateOut)
+                if self.callback:
+                    self.callback("Booked")
+                    messagebox.showinfo("Booking Details", "Edited!") 
+
+            else:
+                db_interaction.write_data(name, phone, dateIn, dateOut, self.room, "Full")
+                messagebox.showinfo("Booking Details", "Successfully Booked!") 
 
             self.controller.frames[GuestView.__name__].display_guests()
             self.controller.frames[DataView.__name__].display_data()
@@ -112,20 +131,4 @@ class BookingView(tk.Frame):
             if self.callback:
                 self.callback("Booked")
 
-            messagebox.showinfo("Booking Details", "Successfully Booked!") 
             self.booking_frame.destroy()
-
-    def add_checkOut(self, room):
-        db_interaction = DatabaseIntraction()
-
-        self.name_entry.config(state='readonly')
-
-        name_label = ttk.Label(self.detail_frame, text=db_interaction.get_guest_detail(room)[0][0],
-                                font=("Helvetica", 12))
-        name_label.grid(row=1, column=1, padx=(40,), pady=(40,0))
-
-        self.phone_entry.config(state='readonly')
-
-        phone_label = ttk.Label(self.detail_frame, text=db_interaction.get_guest_detail(room)[0][1],
-                                font=("Helvetica", 12))
-        phone_label.grid(row=2, column=1, padx=(40,),)

@@ -45,7 +45,7 @@ class DatabaseIntraction():
         return print_records
     
     def display_active_room(self):
-        self.c.execute("SELECT * FROM guests WHERE check_out >= ?", (today,))
+        self.c.execute("SELECT * FROM guests WHERE check_out >= ? AND room_condition != 'Empty'", (today,))
         records = self.c.fetchall()
         print_records = '\n'.join(str(record[:-1]) for record in records)
         return print_records
@@ -60,10 +60,10 @@ class DatabaseIntraction():
     # room condition
     def get_room_status(self, room):
 
-        self.c.execute("SELECT * FROM guests WHERE check_out == ?", (today,))
+        self.c.execute("SELECT * FROM guests WHERE check_out == ? AND room_condition == 'Full'", (today,))
         to_be_cleaned = self.c.fetchall()
 
-        self.c.execute("SELECT * FROM guests WHERE check_out > ?", (today,))
+        self.c.execute("SELECT * FROM guests WHERE check_out > ? AND room_condition == 'Full'", (today,))
         occupied = self.c.fetchall()
 
         room_to_be_cleaned = [record[4] for record in to_be_cleaned]
@@ -77,7 +77,58 @@ class DatabaseIntraction():
             return 'Empty'
         
     def get_guest_detail(self, room):
-        self.c.execute("SELECT * FROM guests WHERE room = ? AND room != 'empty'", (room,))
+        self.c.execute("SELECT * FROM guests WHERE room = ? AND room_condition != 'Empty'", (room,))
         guest_detail = self.c.fetchall()
 
         return guest_detail
+
+    def clean_room(self, room):
+        self.c.execute("SELECT * FROM guests WHERE room = ? AND room_condition != 'Empty'", (room,))
+        guest_detail = self.c.fetchall()
+        print(guest_detail[0][1])
+
+        self.c.execute("""UPDATE guests SET
+                    name = :name,
+                    phone = :phone,
+                    check_in = :dateIn,
+                    check_out = :dateOut,
+                    room = :room, 
+                    room_condition = "Empty"
+                       
+                    WHERE room = :room AND room_condition != 'Empty' """,
+                    {
+                        'name': guest_detail[0][0],
+                        'phone': guest_detail[0][1],
+                        'dateIn': guest_detail[0][2],
+                        'dateOut': guest_detail[0][3],
+                        'room': guest_detail[0][4]
+                    })
+        
+        self.conn.commit()
+
+    def edit_data(self, room, dateOut):
+        self.c.execute("SELECT * FROM guests WHERE room = ? AND room_condition != 'Empty'", (room,))
+        guest_detail = self.c.fetchall()
+        print(guest_detail, dateOut)
+
+        self.c.execute("""UPDATE guests SET
+                    name = :name,
+                    phone = :phone,
+                    check_in = :dateIn,
+                    check_out = :dateOut,
+                    room = :room, 
+                    room_condition = "Full"
+                       
+                    WHERE room = :room AND room_condition != 'Empty' """,
+                    {
+                        'name': guest_detail[0][0],
+                        'phone': guest_detail[0][1],
+                        'dateIn': guest_detail[0][2],
+                        'dateOut': dateOut,
+                        'room': guest_detail[0][4]
+                    })
+        
+        self.conn.commit()
+        
+        for detail in guest_detail:
+            pass

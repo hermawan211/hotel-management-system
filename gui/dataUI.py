@@ -112,9 +112,6 @@ class DataView(tk.Frame):
         self.display_data()
         self.controller.frames[GuestView.__name__].display_guests()
 
-        if self.callback1:
-            self.callback1("Deleted")
-
         messagebox.showinfo("Booking Details", "Successfully Deleted!") 
         self.delete_box.delete(0, END)
 

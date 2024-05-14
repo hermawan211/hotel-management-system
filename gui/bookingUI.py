@@ -89,7 +89,6 @@ class BookingView(tk.Frame):
         # submit
         submit_button = ttk.Button(self.detail_frame, text="Submit", command=self.submit_data)
         submit_button.grid(row=5, column=1, pady=(20,0))
-
         
 
     def cancel_data(self):

@@ -35,6 +35,10 @@ class DataView(tk.Frame):
         delete_button = ttk.Button(self.data_frame, text="Delete", command=lambda: self.delete_data(self.delete_box.get()))
         delete_button.grid(row=2, column=0, pady=(30,0), sticky='e')
 
+        # Download all data to excel
+        excel_button = ttk.Button(self.data_frame, text="Convert to EXCEL", command=self.download_to_excel)
+        excel_button.grid(row=6, column=0, pady=(20,0), padx=(320,0), columnspan=7)
+
         # ------------------ Table frame ------------------
 
         # Create table headers
@@ -115,4 +119,5 @@ class DataView(tk.Frame):
         messagebox.showinfo("Booking Details", "Successfully Deleted!") 
         self.delete_box.delete(0, END)
 
-    
+    def download_to_excel(self):
+        self.db_interaction.export_to_excel()

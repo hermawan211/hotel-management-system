@@ -1,8 +1,11 @@
 from tkinter import *
+from tkinter import filedialog, messagebox
 import tkinter as tk
 import sqlite3
 
-from datetime import date
+import pandas as pd
+
+from datetime import date,timedelta, datetime
 
 today = date.today()
 today = today.strftime("%d-%m-%y")
@@ -40,8 +43,16 @@ class DatabaseIntraction():
 
         self.c.execute("SELECT oid, * FROM guests")
         records = self.c.fetchall()
-        print_records = '\n'.join(str(record[:-1]) for record in records)
-        #self.conn.close()
+        filtered_records = []
+
+        for record in records:
+            check_in_date_str = record[3]
+            check_in_date = datetime.strptime(check_in_date_str, "%d-%m-%y").date()
+            if check_in_date >= date.today() -timedelta(days=30):
+                filtered_records.append(record)
+
+        print_records = '\n'.join(str(record[:-1]) for record in filtered_records)
+        
         return print_records
     
     def display_active_room(self):
@@ -130,5 +141,31 @@ class DatabaseIntraction():
         
         self.conn.commit()
         
-        for detail in guest_detail:
-            pass
+    def export_to_excel(self):
+        print("EXCEL")
+        # Prompt the user to select the SQLite database file
+        db_path = filedialog.askopenfilename(title="Select the SQLite database", filetypes=[("SQLite Database Files", "*.db"), ("All Files", "*.*")])
+    
+        
+        # Prompt the user to select the save location for the Excel file
+        excel_path = filedialog.asksaveasfilename(defaultextension=".xlsx", title="Save the Excel file as", filetypes=[("Excel Files", "*.xlsx"), ("All Files", "*.*")])
+        
+        if db_path and excel_path:
+            # Connect to the SQLite database
+            conn = sqlite3.connect(db_path)
+            
+            # Fetch data from the specified table
+            query = f"SELECT * FROM guests"
+            df = pd.read_sql_query(query, conn)
+            
+            # Close the database connection
+            conn.close()
+            
+            # Write the dataframe to an Excel file
+            df.to_excel(excel_path, index=False, engine='openpyxl')
+            
+            print(f"Data from table has been written to {excel_path}")
+            messagebox.showinfo("Download Details", "Downloaded!") 
+        else:
+            print("Operation cancelled.")
+            messagebox.showinfo("Download Details", "Error!") 

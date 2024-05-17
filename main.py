@@ -11,7 +11,7 @@ import sqlite3
 class HotelManagementSystem(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Hotel Fatima System")
+        self.title("Hotel MEGA 6 System")
 
         label = ttk.Label(self, text="HOTEL MEGA 6", font=("Helvetica", 25, "bold"), background='#F8C21E')
         label.pack(pady=20, padx=20)

@@ -45,7 +45,6 @@ class DashboardView(tk.Frame):
 
         self.list_superII_room = ['A-201', 'A-202', 'A-203', 'A-204',
                                   'B-201', 'B-202', 'B-203', 'B-204',
-                                  'A-301', 'A-302', 'A-303', 'A-304', 'A-305', 'A-306', 'A-307', 'A-308',
                                   'B-301', 'B-302', 'B-303', 'B-304', 'B-305', 'B-306', 'B-307', 'B-308',
                                  ]
 
@@ -83,16 +82,16 @@ class DashboardView(tk.Frame):
 
         superI_label = ttk.Label(self.superI_frame, text="Superior I",
                                   font=("Helvetica", 14, "bold"))
-        superI_label.grid(row=0, column=0, columnspan=8)
+        superI_label.grid(row=0, column=0, columnspan=5)
 
         for i, room in enumerate(list_room):
             superI_container = self.create_container(room, frame)
-            superI_container.grid(row=1, column=i, padx=2, pady=2)
+            #superI_container.grid(row=1, column=i, padx=2, pady=2)
 
-            """if i < 4:
+            if i < 5:
                 superI_container.grid(row=1, column=i, padx=2, pady=2)
             else:
-                superI_container.grid(row=2, column=i-4, padx=2, pady=2,)"""
+                superI_container.grid(row=2, column=i-5, padx=2, pady=2, columnspan=3)
             
 
     def generate_superII_container(self, list_room, frame):
@@ -106,10 +105,8 @@ class DashboardView(tk.Frame):
 
             if i < 8:
                 superII_container.grid(row=1, column=i, padx=2, pady=2)
-            elif i < 16:
-                superII_container.grid(row=2, column=i-8, padx=2, pady=2)
             else:
-                superII_container.grid(row=3, column=i-16, padx=2, pady=2)
+                superII_container.grid(row=3, column=i-8, padx=2, pady=2)
 
     def create_container(self, list_room, frame):
         self.db_interaction = DatabaseIntraction()

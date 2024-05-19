@@ -22,7 +22,7 @@ class DashboardView(tk.Frame):
         # ------------------ Deluxe Frame ------------------
 
         self.deluxe_frame = ttk.Frame(self.dashboard_frame)
-        self.deluxe_frame.grid(row=0, column=0, sticky="w", )
+        self.deluxe_frame.grid(row=0, column=0, sticky="w", padx=(80,0))
 
         self.list_deluxe_room = ['A-01', 'B-01', 'B-02',]
 
@@ -52,7 +52,7 @@ class DashboardView(tk.Frame):
         
         # ------------------ Standard Frame ------------------
         self.standard_frame = ttk.Frame(self.dashboard_frame)
-        self.standard_frame.grid(row=0, column=0, sticky='e')
+        self.standard_frame.grid(row=0, column=0, sticky='e', padx=(0, 80))
 
         self.list_standard_room = ['B-309', 'B-310', 'B-311']
 

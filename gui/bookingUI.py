@@ -15,6 +15,15 @@ class BookingView(tk.Frame):
     def __init__(self, parent, room, controller, callback=None, exist=None):
         super().__init__(parent)
 
+        self.list_deluxe_room = ['A-01', 'B-01', 'B-02',]
+        self.list_superI_room = ['A-101', 'A-102', 'A-103', 'A-104',
+                                 'B-101', 'B-102', 'B-103', 'B-104',]
+        self.list_superII_room = ['A-201', 'A-202', 'A-203', 'A-204',
+                                  'B-201', 'B-202', 'B-203', 'B-204',
+                                  'B-301', 'B-302', 'B-303', 'B-304', 'B-305', 'B-306', 'B-307', 'B-308',
+                                 ]
+        self.list_standard_room = ['B-309', 'B-310', 'B-311']
+
         self.controller = controller
         self.callback = callback
         self.exist = exist
@@ -73,14 +82,32 @@ class BookingView(tk.Frame):
             self.name_var.set(details[0][0])
             self.phone_var.set(details[0][1])
 
+        # Price
+        self.price_var = tk.StringVar()
+        price_label = ttk.Label(self.detail_frame, text="Price: ",
+                                  font=("Helvetica", 12,))
+        price_label.grid(row=3, column=0, sticky='w')
+
+        self.price_entry = ttk.Entry(self.detail_frame, textvariable=self.price_var, font=("Helvetica", 12))
+        self.price_entry.grid(row=3, column=1, padx=(40,))
+
+        if self.room in self.list_deluxe_room:
+            self.price_var.set("250,000")
+        elif self.room in self.list_superI_room:
+            self.price_var.set("200,000")
+        elif self.room in self.list_superII_room:
+            self.price_var.set("180,000")
+        elif self.room in self.list_standard_room:
+            self.price_var.set("160,000")
+
         # Checkout date entry
         checkout_label = ttk.Label(self.detail_frame, text="Checkout Date: ",
                                     font=("Helvetica", 12,))
-        checkout_label.grid(row=3, column=0,pady=(20,0), sticky='nw')
+        checkout_label.grid(row=4, column=0,pady=(20,0), sticky='nw')
 
         self.cal = Calendar(self.detail_frame, selectmode= 'day',
                        year=int(today[6:]), month=int(today[3:5]), day=int(today[:2]))
-        self.cal.grid(row=3, column=1, pady=(20,0))
+        self.cal.grid(row=4, column=1, pady=(10,0))
 
         # Cancel
         cancel_button = ttk.Button(self.detail_frame, text="Cancel", command=self.cancel_data)

@@ -91,15 +91,6 @@ class BookingView(tk.Frame):
         self.price_entry = ttk.Entry(self.detail_frame, textvariable=self.price_var, font=("Helvetica", 12))
         self.price_entry.grid(row=3, column=1, padx=(40,))
 
-        if self.room in self.list_deluxe_room:
-            self.price_var.set("250,000")
-        elif self.room in self.list_superI_room:
-            self.price_var.set("200,000")
-        elif self.room in self.list_superII_room:
-            self.price_var.set("180,000")
-        elif self.room in self.list_standard_room:
-            self.price_var.set("160,000")
-
         # Checkout date entry
         checkout_label = ttk.Label(self.detail_frame, text="Checkout Date: ",
                                     font=("Helvetica", 12,))
@@ -108,6 +99,13 @@ class BookingView(tk.Frame):
         self.cal = Calendar(self.detail_frame, selectmode= 'day',
                        year=int(today[6:]), month=int(today[3:5]), day=int(today[:2]))
         self.cal.grid(row=4, column=1, pady=(10,0))
+
+        self.cal.bind("<<CalendarSelected>>", self.update_price_var)
+
+        """selected_date = self.cal.get_date()
+        month, day, year = selected_date.split('/')
+        self.formatted_date_str = f"{int(day):02d}-{int(month):02d}-{int(year)}"""
+        
 
         # Cancel
         cancel_button = ttk.Button(self.detail_frame, text="Cancel", command=self.cancel_data)
@@ -121,15 +119,34 @@ class BookingView(tk.Frame):
     def cancel_data(self):
         self.booking_frame.destroy()
 
-    def submit_data(self,):
+    def update_price_var(self, event=None):
         selected_date = self.cal.get_date()
         month, day, year = selected_date.split('/')
-        formatted_date = f"{int(day):02d}-{int(month):02d}-{int(year)}"
+        self.formatted_date_str = f"{int(day):02d}-{int(month):02d}-{int(year)}"
+        
+        today_date = datetime.strptime(today, "%d-%m-%y").date()
+        formatted_date = datetime.strptime(self.formatted_date_str, "%d-%m-%y").date()
+        number_of_days = (formatted_date - today_date).days
 
+        self.total_price = number_of_days * self.get_price()
+        self.price_var.set(self.total_price)
+
+    def get_price(self):
+        if self.room in self.list_deluxe_room:
+            return 250000
+        elif self.room in self.list_superI_room:
+            return 200000
+        elif self.room in self.list_superII_room:
+            return 180000
+        elif self.room in self.list_standard_room:
+            return 160000
+
+    def submit_data(self,):
         name = self.name_entry.get()
         phone = self.phone_entry.get()
         dateIn = today
-        dateOut = formatted_date
+        dateOut = self.formatted_date_str
+        price = self.total_price
         #roomCondition = 'Full'
 
         if name =='' or phone=='':
@@ -138,17 +155,18 @@ class BookingView(tk.Frame):
         else:
             self.name_entry.delete(0, END)
             self.phone_entry.delete(0, END)
+            self.price_entry.delete(0, END)
 
             db_interaction = DatabaseIntraction()
             
             if self.exist == True:
-                db_interaction.edit_data(self.room, dateOut)
+                db_interaction.edit_data(self.room, dateOut, price)
                 if self.callback:
                     self.callback("Booked")
                     messagebox.showinfo("Booking Details", "Edited!") 
 
             else:
-                db_interaction.write_data(name, phone, dateIn, dateOut, self.room, "Full")
+                db_interaction.write_data(name, phone, dateIn, dateOut, self.room, price, "Full")
                 messagebox.showinfo("Booking Details", "Successfully Booked!") 
 
             self.controller.frames[GuestView.__name__].display_guests()

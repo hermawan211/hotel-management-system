@@ -26,14 +26,15 @@ class DatabaseIntraction():
                     check_in text,
                     check_out text,
                     room text, 
+                    price text,
                     room_condition text
                     )''')
 
-    def write_data(self, name, phone, dateIn, dateOut, room, room_condition):
+    def write_data(self, name, phone, dateIn, dateOut, room, price, room_condition):
 
         # Insert Into table
-        self.c.execute("INSERT INTO guests VALUES (:name, :phone, :dateIn, :dateOut, :room, :room_condition)",
-                (name, phone, dateIn, dateOut, room, room_condition)
+        self.c.execute("INSERT INTO guests VALUES (:name, :phone, :dateIn, :dateOut, :room, :price, :room_condition)",
+                (name, phone, dateIn, dateOut, room, price, room_condition)
                 )
         
         # Commit changes
@@ -51,14 +52,14 @@ class DatabaseIntraction():
             if check_in_date >= date.today() -timedelta(days=30):
                 filtered_records.append(record)
 
-        print_records = '\n'.join(str(record[:-1]) for record in filtered_records)
+        print_records = '\n'.join(str(record[:-2]) for record in filtered_records)
         
         return print_records
     
     def display_active_room(self):
         self.c.execute("SELECT * FROM guests WHERE check_out >= ? AND room_condition != 'Empty'", (today,))
         records = self.c.fetchall()
-        print_records = '\n'.join(str(record[:-1]) for record in records)
+        print_records = '\n'.join(str(record[:-2]) for record in records)
         return print_records
 
     def delete_data(self, destination):
@@ -104,6 +105,7 @@ class DatabaseIntraction():
                     check_in = :dateIn,
                     check_out = :dateOut,
                     room = :room, 
+                    price = :price,
                     room_condition = "Empty"
                        
                     WHERE room = :room AND room_condition != 'Empty' """,
@@ -112,15 +114,15 @@ class DatabaseIntraction():
                         'phone': guest_detail[0][1],
                         'dateIn': guest_detail[0][2],
                         'dateOut': guest_detail[0][3],
-                        'room': guest_detail[0][4]
+                        'room': guest_detail[0][4],
+                        'price': guest_detail[0][5]
                     })
         
         self.conn.commit()
 
-    def edit_data(self, room, dateOut):
+    def edit_data(self, room, dateOut, price):
         self.c.execute("SELECT * FROM guests WHERE room = ? AND room_condition != 'Empty'", (room,))
         guest_detail = self.c.fetchall()
-        print(guest_detail, dateOut)
 
         self.c.execute("""UPDATE guests SET
                     name = :name,
@@ -128,6 +130,7 @@ class DatabaseIntraction():
                     check_in = :dateIn,
                     check_out = :dateOut,
                     room = :room, 
+                    price = :price,
                     room_condition = "Full"
                        
                     WHERE room = :room AND room_condition != 'Empty' """,
@@ -136,7 +139,8 @@ class DatabaseIntraction():
                         'phone': guest_detail[0][1],
                         'dateIn': guest_detail[0][2],
                         'dateOut': dateOut,
-                        'room': guest_detail[0][4]
+                        'room': guest_detail[0][4],
+                        'price': price
                     })
         
         self.conn.commit()

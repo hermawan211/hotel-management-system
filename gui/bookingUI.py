@@ -101,10 +101,6 @@ class BookingView(tk.Frame):
         self.cal.grid(row=4, column=1, pady=(10,0))
 
         self.cal.bind("<<CalendarSelected>>", self.update_price_var)
-
-        """selected_date = self.cal.get_date()
-        month, day, year = selected_date.split('/')
-        self.formatted_date_str = f"{int(day):02d}-{int(month):02d}-{int(year)}"""
         
 
         # Cancel

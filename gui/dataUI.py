@@ -24,16 +24,20 @@ class DataView(tk.Frame):
         self.data_table = ttk.Frame(self.data_frame, relief='ridge')
         self.data_table.grid(row=1, column=0, sticky="nsew", padx=(180,15))
 
-        self.delete_box = ttk.Entry(self.data_frame, width=50)
-        self.delete_box.grid(row=2, column=0, pady=(30,0), padx=(380, 0))
+        self.primaryKey_box = ttk.Entry(self.data_frame, width=50)
+        self.primaryKey_box.grid(row=2, column=0, pady=(30,0), padx=(380, 0))
 
         # No to delete
         num_label = ttk.Label(self.data_frame, text="No: ", font=("Helvetica", 12,))
         num_label.grid(row=2, column=0,padx=(0,0), pady=(30,0))
 
         # delete button
-        delete_button = ttk.Button(self.data_frame, text="Delete", command=lambda: self.delete_data(self.delete_box.get()))
+        delete_button = ttk.Button(self.data_frame, text="Delete", command=lambda: self.delete_data(self.primaryKey_box.get()))
         delete_button.grid(row=2, column=0, pady=(30,0), sticky='e')
+
+        # print button
+        print_button = ttk.Button(self.data_frame, text="Print", command=lambda: self.print_data(self.primaryKey_box.get()))
+        print_button.grid(row=2, column=1, pady=(30,0),)
 
         # Download all data to excel
         excel_button = ttk.Button(self.data_frame, text="Convert to EXCEL", command=self.download_to_excel)
@@ -108,7 +112,6 @@ class DataView(tk.Frame):
             total = self.column_widths[i] - pad[i]
             header_label.grid_configure(padx=(0, total), pady=5)
 
-
     def delete_data(self, rowNum):
         self.db_interaction.delete_data(rowNum)
 
@@ -117,7 +120,11 @@ class DataView(tk.Frame):
         self.controller.frames[GuestView.__name__].display_guests()
 
         messagebox.showinfo("Booking Details", "Successfully Deleted!") 
-        self.delete_box.delete(0, END)
+        self.primaryKey_box.delete(0, END)
+
+    def print_data(self, rowNum):
+        self.db_interaction.print_data(rowNum)
+        self.primaryKey_box.delete(0, END)
 
     def download_to_excel(self):
         self.db_interaction.export_to_excel()

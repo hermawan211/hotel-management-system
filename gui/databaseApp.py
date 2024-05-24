@@ -6,6 +6,7 @@ import sqlite3
 import pandas as pd
 
 from datetime import date,timedelta, datetime
+from gui.printing import *
 
 today = date.today()
 today = today.strftime("%d-%m-%y")
@@ -67,6 +68,20 @@ class DatabaseIntraction():
         self.c.execute("DELETE from guests WHERE oid=" + destination)
 
         self.conn.commit()
+
+    def print_data(self, oid):
+        self.c.execute("SELECT * FROM guests WHERE oid=" + oid)
+        detail = self.c.fetchall()
+        
+        name = detail[0][0]
+        phone = detail[0][1]
+        date = today
+        dateIn = detail[0][2]
+        dateOut = detail[0][3]
+        room = detail[0][4]
+        price = detail[0][5]
+
+        write_pdf(name, phone, date, dateIn, dateOut, room, price)
 
 
     # room condition

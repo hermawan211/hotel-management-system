@@ -1,8 +1,7 @@
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, landscape
 
-myCanvas = canvas.canvas('receipt.pdf', pagesize=A4)
-width, height = A4
+
 
 list_deluxe_room = ['A-01', 'B-01', 'B-02',]
 list_superI_room = ['A-101', 'A-102', 'A-103', 'A-104',
@@ -14,4 +13,65 @@ list_superII_room = ['A-201', 'A-202', 'A-203', 'A-204',
 list_standard_room = ['B-309', 'B-310', 'B-311']
 
 def write_pdf(name, phone, date, dateIn, dateOut, room, price):
-    print(name, phone)
+    myCanvas = canvas.Canvas('receiptest.pdf', pagesize=landscape(A4))
+    width, height = landscape(A4)
+
+
+    # Title
+    title_text = "Hotel MEGA 6"
+    myCanvas.setFont("Helvetica-Bold", 36)
+    title_width = myCanvas.stringWidth(title_text, "Helvetica-Bold", 36)
+    x_position = (width - title_width) / 2
+
+    myCanvas.drawString(x_position, height - 100, title_text)
+
+    # Receipt
+    receipt_text = "Receipt"
+    myCanvas.setFont("Helvetica-Bold", 22)
+    receipt_width = myCanvas.stringWidth(receipt_text, "Helvetica-Bold", 22)
+    x_position = (width - receipt_width) / 2
+
+    myCanvas.drawString(x_position, height - 140, receipt_text)
+
+    # Details
+    myCanvas.setFont("Helvetica-Bold", 18)
+    myCanvas.drawString(width - 750, height - 200, "Name           :")
+    myCanvas.drawString(width - 630, height - 200, name)
+
+    myCanvas.drawString(width - 380, height - 200, "Date    :")
+    myCanvas.drawString(width - 280, height - 200, date)
+
+    myCanvas.drawString(width - 750, height - 225, "Phone          :")
+    myCanvas.drawString(width - 630, height - 225, phone)
+
+    myCanvas.drawString(width - 750, height - 250, "Check In      :")
+    myCanvas.drawString(width - 630, height - 250, dateIn)
+
+    myCanvas.drawString(width - 750, height - 275, "Check Out   :")
+    myCanvas.drawString(width - 630, height - 275, dateOut)
+
+    myCanvas.setLineWidth(3)
+    myCanvas.line(width - 750, height - 303, width - 130, height - 303)
+    myCanvas.drawString(width - 750, height - 320, "Room    Type")
+    myCanvas.drawString(width - 230, height - 320, "Price")
+    myCanvas.line(width - 750, height - 327, width - 130, height - 327)
+
+    myCanvas.drawString(width - 750, height - 355, room)
+    myCanvas.drawString(width - 680, height - 355, get_type(room))
+    myCanvas.drawString(width - 230, height - 355, price)
+    myCanvas.line(width - 750, height - 375, width - 130, height - 375)
+
+    myCanvas.showPage()
+    myCanvas.save()
+
+    print("Hereee")
+
+def get_type(room):
+    if room in list_deluxe_room:
+        return "DELUXE"
+    elif room in list_superI_room:
+        return "SUPERIOR I"
+    elif room in list_superII_room:
+        return "SUPERIOR II"
+    elif room in list_standard_room:
+        return "STANDARD"

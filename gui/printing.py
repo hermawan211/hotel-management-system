@@ -16,6 +16,8 @@ def write_pdf(name, phone, date, dateIn, dateOut, room, price):
     myCanvas = canvas.Canvas('receiptest.pdf', pagesize=landscape(A4))
     width, height = landscape(A4)
 
+    # Draw the background image
+    myCanvas.drawImage('images/Logo.jpg', 0, -160, width=width, height=height + 300)
 
     # Title
     title_text = "Hotel MEGA 6"

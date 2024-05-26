@@ -1,8 +1,6 @@
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, landscape
 
-
-
 list_deluxe_room = ['A-01', 'B-01', 'B-02',]
 list_superI_room = ['A-101', 'A-102', 'A-103', 'A-104',
                             'B-101', 'B-102', 'B-103', 'B-104',]
@@ -62,6 +60,10 @@ def write_pdf(name, phone, date, dateIn, dateOut, room, price):
     myCanvas.drawString(width - 680, height - 355, get_type(room))
     myCanvas.drawString(width - 230, height - 355, price)
     myCanvas.line(width - 750, height - 375, width - 130, height - 375)
+
+    myCanvas.setLineWidth(2)
+    myCanvas.line(width - 250, height - 500, width - 130, height - 500)
+    myCanvas.drawString(width - 230, height - 530, "Signature")
 
     myCanvas.showPage()
     myCanvas.save()

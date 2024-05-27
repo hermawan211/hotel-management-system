@@ -1,5 +1,9 @@
+import os
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, landscape
+"""import win32api
+import win32print"""
+import subprocess
 
 list_deluxe_room = ['A-01', 'B-01', 'B-02',]
 list_superI_room = ['A-101', 'A-102', 'A-103', 'A-104',
@@ -68,7 +72,18 @@ def write_pdf(name, phone, date, dateIn, dateOut, room, price):
     myCanvas.showPage()
     myCanvas.save()
 
-    print("Hereee")
+    print("PDF generated!")
+
+    if os.path.isfile('receiptest.pdf'):
+        try:
+            print("YES THERE IS")
+            #win32api.ShellExecute(0, "print", 'receiptest.pdf', None, ".", 0)
+            subprocess.run(['start', '/WAIT', "receiptest.pdf", '/p'], shell=True, check=True)
+        except Exception as e:
+            #print(f"ERROR: {e} \nPrinter: {win32print.GetDefaultPrinter()}")
+            print("ERROR")
+    else:
+        print("File does not exist")
 
 def get_type(room):
     if room in list_deluxe_room:

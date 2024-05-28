@@ -17,7 +17,7 @@ class DashboardView(tk.Frame):
 
         # Create parent frame for layout
         self.dashboard_frame = ttk.Frame(self)
-        self.dashboard_frame.grid(row=0, column=0, sticky="nsew")
+        self.dashboard_frame.grid(row=0, column=0, sticky="nswe", )
 
         # ------------------ Deluxe Frame ------------------
 

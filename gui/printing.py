@@ -1,8 +1,6 @@
 import os
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, landscape
-"""import win32api
-import win32print"""
 import subprocess
 
 list_deluxe_room = ['A-01', 'B-01', 'B-02',]
@@ -15,7 +13,7 @@ list_superII_room = ['A-201', 'A-202', 'A-203', 'A-204',
 list_standard_room = ['B-309', 'B-310', 'B-311']
 
 def write_pdf(name, phone, date, dateIn, dateOut, room, price):
-    myCanvas = canvas.Canvas('receiptest.pdf', pagesize=landscape(A4))
+    myCanvas = canvas.Canvas('receipt.pdf', pagesize=landscape(A4))
     width, height = landscape(A4)
 
     # Draw the background image
@@ -74,13 +72,11 @@ def write_pdf(name, phone, date, dateIn, dateOut, room, price):
 
     print("PDF generated!")
 
-    if os.path.isfile('receiptest.pdf'):
+    if os.path.isfile('receipt.pdf'):
         try:
             print("YES THERE IS")
-            #win32api.ShellExecute(0, "print", 'receiptest.pdf', None, ".", 0)
-            subprocess.run(['start', '/WAIT', "receiptest.pdf", '/p'], shell=True, check=True)
+            subprocess.run(['start', '/WAIT', "receipt.pdf", '/p'], shell=True, check=True)
         except Exception as e:
-            #print(f"ERROR: {e} \nPrinter: {win32print.GetDefaultPrinter()}")
             print("ERROR")
     else:
         print("File does not exist")
